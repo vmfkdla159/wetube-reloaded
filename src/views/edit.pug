@@ -1,6 +1,7 @@
 extends layout.pug 
 
-
-
 block content 
-    h1 Edit video 
+    h4 Change Title of video 
+    form(method="POST")
+          input(name="title" placeholder="Video Title" value=pageTitle required)
+          input(type="submit" value="save")
