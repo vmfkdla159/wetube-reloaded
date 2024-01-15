@@ -2,7 +2,7 @@
 // 모델의 형태를 알려주기 위해 형태를 정의하는데
 // 정의한 형태를 schema라고 한다.
 
-// "default:..."은 스키마에 정의해 놓으면 POST되어 온 정보에 기본적으로 
+// "default:..."은 스키마에 정의해 놓으면 POST되어 온 정보에 기본적으로
 // 스키마에 정의해 놓은 정보를 넣어주는 역할을 한다.
 // 그러므로 POST할 때 default된 코드를 중복해서 안 넣어도 되는 효과가 있다.
 
@@ -14,16 +14,21 @@
 import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
-    title: { type: String, required: true, trim: true, maxLength: 80 },
-    description: { type: String, required: true, trim: true, minLength: 20 },
-    createdAt: { type: Date, required: true, default: Date.now },
-    hashTags: [{ type: String, trim: true }],
-    meta: {
-        views: { type: Number, default: 0, required: true },
-        rating: { type: Number, default: 0, required: true },
-    },
+  title: { type: String, required: true, trim: true, maxLength: 80 },
+  description: { type: String, required: true, trim: true, minLength: 20 },
+  createdAt: { type: Date, required: true, default: Date.now },
+  hashTags: [{ type: String, trim: true }],
+  meta: {
+    views: { type: Number, default: 0, required: true },
+    rating: { type: Number, default: 0, required: true },
+  },
 });
 
+videoSchema.pre("save", async function () {
+  this.hashTags = this.hashTags[0]
+    .split(",")
+    .map((word) => (word.startsWith("#") ? `#${word.replace(/#/g, "")}` : `#${word}`));
+});
 
 const Video = mongoose.model("Video", videoSchema);
 export default Video;
