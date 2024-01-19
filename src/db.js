@@ -2,7 +2,6 @@
 //mongoose를 실행 코드를 작성한 파일이 db.js이고,
 //이 파일을 init.js에 연결했다.
 
-
 import mongoose from "mongoose";
 
 mongoose.connect("mongodb://127.0.0.1:27017/wetubedb");

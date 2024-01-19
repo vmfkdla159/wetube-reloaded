@@ -36,7 +36,7 @@ export const postEdit = async (req, res) => {
   await Video.findByIdAndUpdate(id, {
     title,
     description,
-    hashTags: hashTags.split(",").map((word) => (word.startsWith("#") ? `#${word.replace(/#/g, "")}` : `#${word}`)),
+    hashTags: hashTags.split(",").map((word) => (word.startsWith("#") ? word : `#${word}`)),
   });
   await video.save();
   return res.redirect(`/videos/${id}`);
@@ -51,13 +51,17 @@ export const getUpload = (req, res) => {
 // 실행 순서는 try{...}안의 코드를 실행하려고 '시도'를 하고 시도하는 와중에
 // error가 발생하면 붙잡아서 catch{...}안의 코드를 실행하는 것이다.
 // error가 없으면 그대로 try{...}안의 코드를 실행한다.
+
+console.log("hi");
+
 export const postUpload = async (req, res) => {
+  console.log("hi");
   const { title, description, hashTags } = req.body;
   try {
     await Video.create({
       title,
       description,
-      hashTags,
+      hashTags: hashTags.split(",").map((word) => (word.startsWith("#") ? word : `#${word}`)),
     });
     return res.redirect("/");
   } catch (error) {
@@ -66,4 +70,7 @@ export const postUpload = async (req, res) => {
       errorMessage: error._message,
     });
   }
+  console.log("hi");
 };
+
+console.log("hi");
